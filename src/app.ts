@@ -1,7 +1,7 @@
 import express, { Application } from "express";
 
-import weatherRoutes from "./routes/weather.route";
 import { errorHandler } from "./middlewares/errorHandler";
+import weatherRoutes from "./routes/weather.route";
 
 const app: Application = express();
 app.use(express.json());
