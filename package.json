@@ -4,6 +4,7 @@
   "description": "A weather api which retrieves the data from a third party api and applies caching",
   "main": "index.js",
   "scripts": {
+    "build": "tsc",
     "start": "ts-node-dev src/index.ts",
     "lint": "eslint 'src/**/*.{ts,tsx}'",
     "test": "jest",
