@@ -39,7 +39,6 @@ export class WeatherService {
             } else if (error instanceof HttpError) {
                 throw error;
             }
-
             throw new HttpError(500, 'Internal Server Error', 'WeatherService');
         }
     }

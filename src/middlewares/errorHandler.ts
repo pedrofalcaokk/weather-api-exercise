@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 
 import { HttpError } from "../utils/errors";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const errorHandler = (error: Error, req: Request, res: Response, next: NextFunction): void => {
     if (error instanceof HttpError) {
         res.status(error.statusCode).json({

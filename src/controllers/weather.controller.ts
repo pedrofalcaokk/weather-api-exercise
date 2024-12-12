@@ -7,7 +7,7 @@ export async function getLocationWeather(req: Request, res: Response, next: Next
     try {
         // validate the request
         if (!req.params.location) {
-            throw new HttpError(500, 'Invalid location', 'WeatherService');
+            throw new HttpError(400, 'Invalid location', 'WeatherService');
         }
 
         const weatherData = await WeatherService.getInstance().getLocationWeatherData(req.params.location);
