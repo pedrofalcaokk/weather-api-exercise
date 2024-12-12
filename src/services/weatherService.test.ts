@@ -13,8 +13,7 @@ let mockWeatherData: Weather,
 describe('Weather Service', () => {
     beforeEach(() => {
         jest.clearAllMocks();
-        mockedAxios.get.mockReset();
-        mockedAxios.isAxiosError.mockReset();
+        mockedAxios.isAxiosError.mockReturnValue(false);
 
         mockWeatherData = {
             "latitude": 20.5516,
