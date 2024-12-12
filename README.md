@@ -2,6 +2,8 @@
 
 This repository contains a solution for the weather api challenge given by [roadmap.sh](https://roadmap.sh/projects/weather-api-wrapper-service).
 
+[![API CI](https://github.com/pedrofalcaokk/weather-api-exercise/actions/workflows/node.js.yml/badge.svg)](https://github.com/pedrofalcaokk/weather-api-exercise/actions/workflows/node.js.yml)
+
 ## Description
 
 A Node.js/Express API that fetches weather information from a third party API, stores it in cache (PENDING DEVELOPMENT), and provides endpoints to access said information.
