@@ -1,7 +1,7 @@
 import { getMockReq, getMockRes } from '@jest-mock/express';
 import { describe, expect, it, jest } from '@jest/globals';
 
-import { WeatherService } from '../services/weatherService';
+import { WeatherService } from '../services/weather.service';
 import { Weather } from '../types/weather.types';
 import { HttpError } from '../utils/errors';
 import { getLocationWeather } from './weather.controller';

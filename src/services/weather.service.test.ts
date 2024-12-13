@@ -1,13 +1,19 @@
 import { beforeEach, describe, expect, it, jest } from '@jest/globals';
 import axios from "axios";
 
+import { CacheService } from './cache.service';
 import { VisualCrossingApiResponse, Weather } from '../types/weather.types';
 import { HttpError } from '../utils/errors';
-import { WeatherService } from './weatherService';
+import { WeatherService } from './weather.service';
 
 jest.mock('axios');
 const mockedAxios = axios as jest.Mocked<typeof axios>;
+
+jest.mock('./cache.service');
+const mockedCacheService = CacheService as jest.Mocked<typeof CacheService>;
+
 let mockWeatherData: Weather,
+    mockDifferentWeatherData: Weather,
     mockExternalResponse: VisualCrossingApiResponse;
 
 describe('Weather Service', () => {
@@ -16,6 +22,18 @@ describe('Weather Service', () => {
         mockedAxios.isAxiosError.mockReturnValue(false);
 
         mockWeatherData = {
+            "latitude": 20.5516,
+            "longitude": -20.42915,
+            "description": "Partly cloudy throughout the day.",
+            "maxTemperature": 13.2,
+            "minTemperature": 4.6,
+            "humidity": 59.2,
+            "conditions": "Partially cloudy",
+            "sunrise": "07:50:39",
+            "sunset": "17:03:44"
+        };
+
+        mockDifferentWeatherData = {
             "latitude": 20.5516,
             "longitude": -20.42915,
             "description": "Partly cloudy throughout the day.",
@@ -45,6 +63,11 @@ describe('Weather Service', () => {
                 }
             ]
         }
+
+        mockedCacheService.getInstance.mockReturnValue({
+            get: jest.fn(() => null),
+            set: jest.fn()
+        } as unknown as CacheService);
     });
 
     it('Should return an instance of WeatherService when getInstance is called', () => {
@@ -58,6 +81,38 @@ describe('Weather Service', () => {
         });
 
         // Get the response from the weather service
+        const result = await WeatherService.getInstance().getLocationWeatherData('London');
+
+        expect(result).toEqual(mockWeatherData);
+    });
+
+    it('Should return weather cached data when available', async () => {
+        // Mock the response for the external API call
+        mockedAxios.get.mockResolvedValue({
+            data: mockExternalResponse
+        });
+
+        // Mock a different value for the cache
+        mockedCacheService.getInstance.mockReturnValue({
+            get: jest.fn(() => mockDifferentWeatherData),
+            set: jest.fn()
+        } as unknown as CacheService);
+
+        // Get the response from the weather service
+        const result = await WeatherService.getInstance().getLocationWeatherData('London');
+
+        expect(result).toEqual(mockDifferentWeatherData);
+    });
+
+    it('Should log error, but not stop the operation when the cache service fails to store the weather data', async () => {
+        // Mock an error from the cache service
+        mockedCacheService.getInstance.mockReturnValue({
+            get: jest.fn(() => null),
+            set: jest.fn(() => {
+                throw new Error('Error saving value');
+            })
+        } as unknown as CacheService);
+
         const result = await WeatherService.getInstance().getLocationWeatherData('London');
 
         expect(result).toEqual(mockWeatherData);
