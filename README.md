@@ -105,7 +105,6 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - NODE_ENV=production
       - API_PORT=3000
       - VISUAL_CROSSING_API_KEY=your_api_key
       - VISUAL_CROSSING_API_URL=your_api_url
