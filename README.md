@@ -94,3 +94,38 @@ backend/
 ├── jest.config.js   # Test configuration
 └── package.json     # Project dependencies
 ```
+
+## Deployment
+
+The recommended way to deploy this application is with docker-compose, here is an example that sets it up with a local redis cache layer as well:
+```yaml
+services:
+  api:
+    image: ghcr.io/pedrofalcaokk/weather-api-exercise:main
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - API_PORT=3000
+      - VISUAL_CROSSING_API_KEY=your_api_key
+      - VISUAL_CROSSING_API_URL=your_api_url
+      - REDIS_USER=default
+      - REDIS_PASSWORD=YOUR-PASSWORD
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    depends_on:
+      - redis
+  redis:
+    image: redis:8.0-M02-alpine
+    container_name: redis-container
+    ports:
+      - "6379:6379"
+    command: ["redis-server", "--appendonly", "yes", "--requirepass", "YOUR-PASSWORD"]
+    volumes:
+      - redis_data:/data
+
+volumes:
+  redis_data:
+```
+
+* Please change the version used from main to an actual verion, main is meant for development
