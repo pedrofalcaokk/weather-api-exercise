@@ -127,4 +127,4 @@ volumes:
   redis_data:
 ```
 
-* Please change the version used from main to an actual verion, main is meant for development
+* Please change the version used from main to an actual version, main is meant for development
