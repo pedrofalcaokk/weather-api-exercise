@@ -2,6 +2,7 @@ import axios from "axios";
 
 import { VisualCrossingApiDay, VisualCrossingApiResponse, Weather } from "../types/weather.types";
 import { HttpError } from "../utils/errors";
+import { CacheService } from "./cache.service";
 
 export class WeatherService {
     private static instance: WeatherService;
@@ -15,6 +16,8 @@ export class WeatherService {
 
     /**
      * Retrieves the instance of the service
+     * 
+     * @returns WeatherService
      */
     public static getInstance(): WeatherService {
         if (!WeatherService.instance) {
@@ -32,13 +35,15 @@ export class WeatherService {
      */
     public async getLocationWeatherData(location: string): Promise<Weather> {
         try {
-            return await this.getExternalWeatherData(location);
+            const storedValue = await CacheService.getInstance().get<Weather>(location);
+            return storedValue ?? await this.getExternalWeatherData(location);
         } catch (error) {
             if (axios.isAxiosError(error)) {
                 throw new HttpError(error.response?.status || 500, 'Failed to retrieve weather information', 'WeatherService');
             } else if (error instanceof HttpError) {
                 throw error;
             }
+
             throw new HttpError(500, 'Internal Server Error', 'WeatherService');
         }
     }
@@ -76,6 +81,20 @@ export class WeatherService {
             sunset: currentDay.sunset
         }
 
+        try {
+            await CacheService.getInstance().set<Weather>(location, weatherData, this.getSecondsUntilMidnight());
+        } catch (error) {
+            console.log('Error encountered when trying to save weather to cache: ', error);
+        }
+
         return weatherData;
+    }
+
+    private getSecondsUntilMidnight(): number {
+        const now = new Date()
+        const midnight = new Date(now)
+        midnight.setHours(24, 0, 0, 0)
+
+        return Math.floor((midnight.getTime() - now.getTime()) / 1000)
     }
 }

@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 
-import { WeatherService } from "../services/weatherService";
+import { WeatherService } from "../services/weather.service";
 import { HttpError } from "../utils/errors";
 
 export async function getLocationWeather(req: Request, res: Response, next: NextFunction): Promise<void> {

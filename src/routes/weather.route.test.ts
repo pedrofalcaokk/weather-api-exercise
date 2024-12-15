@@ -2,7 +2,7 @@ import { beforeAll, describe, expect, it, jest } from '@jest/globals';
 import express, { Application } from 'express';
 import request from 'supertest';
 
-import { WeatherService } from '../services/weatherService';
+import { WeatherService } from '../services/weather.service';
 import { Weather } from '../types/weather.types';
 import weatherRouter from './weather.route';
 
