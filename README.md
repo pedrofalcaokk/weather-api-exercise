@@ -22,14 +22,31 @@ A Node.js/Express API that fetches weather information from a third party API, s
 npm install
 ```
 
-2. Copy the contents of .env.example into a .env file and fill in the details
+2. [Optional] Start a local redis container with docker-compose
 
-3. Start the development server:
+```yaml
+services:
+  redis:
+    image: redis:8.0-M02-alpine
+    container_name: redis-container
+    ports:
+      - "6379:6379"
+    command: ["redis-server", "--appendonly", "yes", "--requirepass", "YOUR-PASSWORD"]
+    volumes:
+      - redis_data:/data
+
+volumes:
+  redis_data:
+```
+
+3. Copy the contents of .env.example into a .env file and fill in the details
+
+4. Start the development server:
 ```bash
 npm start
 ```
 
-4. Run tests:
+5. Run tests:
 ```bash
 # Regular tests
 npm test
@@ -38,7 +55,7 @@ npm test
 npm run test:coverage
 ```
 
-5. Run Linting:
+6. Run Linting:
 ```bash
 npm run lint
 ```
