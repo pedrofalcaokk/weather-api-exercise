@@ -6,7 +6,7 @@ This repository contains a solution for the weather api challenge given by [road
 
 ## Description
 
-A Node.js/Express API that fetches weather information from a third party API, stores it in cache (PENDING DEVELOPMENT), and provides endpoints to access said information.
+A Node.js/Express API that fetches weather information from a third party API, stores it in cache, and provides endpoints to access said information.
 
 ## Tech Stack
 - Node.js
